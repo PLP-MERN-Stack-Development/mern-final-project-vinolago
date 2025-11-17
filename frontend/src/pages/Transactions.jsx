@@ -5,14 +5,11 @@ import { useUser, useAuth } from "@clerk/clerk-react";
 import { Button, Card, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui";
 import TransactionCard from "../components/TransactionCard";
 import axios from 'axios';
-import { useSocket } from '../context/SocketContext';
-import toast from 'react-hot-toast';
 
 export default function Transactions() {
 
   const { user, isLoaded } = useUser();
   const { getToken } = useAuth();
-  const { socket, isConnected } = useSocket();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,35 +51,7 @@ export default function Transactions() {
     if (isLoaded && user) {
       fetchTransactions();
     }
-  }, [isLoaded, user, getToken]);
-
-  // Real-time updates for transaction list
-  useEffect(() => {
-    if (!socket || !isConnected) return;
-
-    const handleTransactionCreated = (data) => {
-      console.log('New transaction created:', data);
-      toast.success('New transaction created!');
-      // Refresh transactions list
-      setTransactions(prev => [data.transaction, ...prev]);
-    };
-
-    const handleTransactionUpdated = (data) => {
-      console.log('Transaction updated:', data);
-      // Update specific transaction in list
-      setTransactions(prev => prev.map(tx => 
-        tx.id === data.transactionId ? { ...tx, ...data.transaction } : tx
-      ));
-    };
-
-    socket.on('transaction-created', handleTransactionCreated);
-    socket.on('transaction-updated', handleTransactionUpdated);
-
-    return () => {
-      socket.off('transaction-created', handleTransactionCreated);
-      socket.off('transaction-updated', handleTransactionUpdated);
-    };
-  }, [socket, isConnected]);
+  }, [isLoaded, user, getToken])
 
     const navigate = useNavigate();
 

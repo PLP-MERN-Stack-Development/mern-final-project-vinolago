@@ -9,6 +9,13 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./test-setup.js'],
     css: true,
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/*.e2e.spec.js',
+      '**/e2e/**',
+      '**/playwright/**',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -18,6 +25,7 @@ export default defineConfig({
         'test-utils.jsx',
         '**/*.test.{js,jsx,ts,tsx}',
         '**/*.spec.{js,jsx,ts,tsx}',
+        '**/*.e2e.spec.js',
       ],
     },
   },

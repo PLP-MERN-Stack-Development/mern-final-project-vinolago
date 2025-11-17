@@ -1,4 +1,4 @@
-import { expect, afterEach, vi } from 'vitest';
+import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 
@@ -40,3 +40,30 @@ global.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}
 };
+
+// Mock Clerk hooks
+vi.mock('@clerk/clerk-react', () => ({
+  useUser: vi.fn(() => ({
+    isSignedIn: true,
+    user: {
+      id: 'test-user-id',
+      emailAddresses: [{ emailAddress: 'test@example.com' }],
+      firstName: 'Test',
+      lastName: 'User',
+    },
+  })),
+  useAuth: vi.fn(() => ({
+    isSignedIn: true,
+    userId: 'test-user-id',
+    sessionId: 'test-session-id',
+    getToken: vi.fn(() => Promise.resolve('mock-token')),
+  })),
+  ClerkProvider: ({ children }) => children,
+  SignIn: () => null,
+  SignUp: () => null,
+  UserButton: () => null,
+}));
+
+// Mock environment variables
+process.env.VITE_API_URL = 'http://localhost:5000/api';
+process.env.VITE_CLERK_PUBLISHABLE_KEY = 'pk_test_mock_key';
