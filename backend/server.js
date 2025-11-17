@@ -1,9 +1,18 @@
 const express = require('express');
+const http = require('http');
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
+const server = http.createServer(app);
+
+// Initialize Socket.io
+const { initializeSocket } = require('./utils/socket');
+const io = initializeSocket(server);
+
+// Make io accessible to routes
+app.set('io', io);
 
 // Import middleware
 const { combinedLogger, errorLogger } = require('./middleware/logger');
@@ -94,8 +103,9 @@ app.use(errorLogger);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Socket.io server ready for connections`);
 });
 
-module.exports = app;
+module.exports = { app, server, io };

@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useAuth } from '@clerk/clerk-react';
+import { useTransactionSocket } from '../utils/useSocketHooks';
 
 export default function TransactionProgress() {
     const [searchParams] = useSearchParams();
@@ -15,7 +16,7 @@ export default function TransactionProgress() {
     const [loading, setLoading] = useState(true);
     const { getToken, user } = useAuth();
 
-    // Fetch transaction data from backend
+    // Fetch transaction data from backend (initial load only)
     useEffect(() => {
         const fetchTransaction = async () => {
             try {
@@ -39,11 +40,30 @@ export default function TransactionProgress() {
 
         if (transactionId) {
             fetchTransaction();
-            // Poll for status updates every 30 seconds
-            const interval = setInterval(fetchTransaction, 30000);
-            return () => clearInterval(interval);
         }
     }, [transactionId, getToken]);
+
+    // Real-time updates via Socket.io
+    useTransactionSocket(transactionId, {
+        onUpdate: (data) => {
+            console.log('Transaction updated:', data);
+            setTransaction(prev => ({ ...prev, ...data.transaction }));
+            toast.success('Transaction updated!', { icon: '🔄' });
+        },
+        onStatusChange: (data) => {
+            console.log('Status changed:', data);
+            setTransactionStatus(data.status);
+            setTransaction(prev => ({ ...prev, status: data.status }));
+            toast.success(`Status changed to: ${data.status}`, { icon: '✅' });
+        },
+        onPaymentUpdate: (data) => {
+            console.log('Payment updated:', data);
+            setTransaction(prev => ({ ...prev, paymentStatus: data.paymentStatus }));
+            if (data.paymentStatus === 'completed') {
+                toast.success('Payment completed!', { icon: '💰' });
+            }
+        }
+    });
 
     // Determine if current user is seller or buyer
     const isSeller = transaction && user && transaction.seller?.clerkId === user.id;
