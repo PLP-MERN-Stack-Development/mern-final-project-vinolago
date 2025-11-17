@@ -351,12 +351,12 @@ View complete history:
 
 2. **Enter Amount**
 
-   - Minimum: ₦1,000
-   - Maximum: ₦1,000,000 per transaction
+   - Minimum: KES1,00
+   - Maximum: KES 1,000,000 per transaction
 
 3. **Choose Method**
 
-   - Card payment (instant)
+   - Mpesa payment (instant)
    - Bank transfer (1-2 hours)
 
 4. **Complete Payment**
@@ -368,7 +368,7 @@ View complete history:
 1. **Check Balance**
 
    - Ensure sufficient balance
-   - Minimum withdrawal: ₦5,000
+   - Minimum withdrawal: KES 5,000
 
 2. **Click "Withdraw"**
 
