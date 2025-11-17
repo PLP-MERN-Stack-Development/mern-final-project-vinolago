@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '../../test-utils';
-import Input from './Input';
+import { render, screen } from '../../test-utils.jsx';
+import Input from './Input.jsx';
 
 describe('Input Component', () => {
   it('renders input field', () => {

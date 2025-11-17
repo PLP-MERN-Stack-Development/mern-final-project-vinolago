@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '../../test-utils';
-import Button from './Button';
+import { render, screen } from '../../test-utils.jsx';
+import Button from './Button.jsx';
 
 describe('Button Component', () => {
   it('renders with children', () => {
