@@ -14,7 +14,7 @@ The Escrow Application is a comprehensive full-stack solution that enables secur
 ### ✨ Key Features
 
 - 🔐 **Secure Authentication** - JWT-based auth with Clerk integration
-- 💳 **Payment Integration** - Seamless Paystack payment gateway
+- 💳 **Payment Integration** - M-Pesa STK Push integration
 - ⚡ **Real-time Updates** - Socket.IO for instant notifications
 - 💰 **Wallet System** - Built-in wallet for fund management
 - ⚖️ **Dispute Resolution** - Admin-mediated dispute handling
@@ -146,9 +146,6 @@ JWT_SECRET=your-super-secret-jwt-key-change-this
 # Clerk (Authentication)
 CLERK_SECRET_KEY=your-clerk-secret-key
 
-# Paystack (Payments)
-PAYSTACK_SECRET_KEY=sk_test_your_paystack_secret_key
-PAYSTACK_PUBLIC_KEY=pk_test_your_paystack_public_key
 
 # Frontend URL (for CORS)
 FRONTEND_URL=http://localhost:5173
@@ -201,8 +198,9 @@ VITE_API_URL=http://localhost:5000
 # Clerk (Authentication)
 VITE_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_publishable_key
 
-# Paystack
-VITE_PAYSTACK_PUBLIC_KEY=pk_test_your_paystack_public_key
+# M-Pesa Configuration
+VITE_MPESA_ENVIRONMENT=sandbox
+VITE_MPESA_SHORTCODE=your-mpesa-shortcode
 
 # Sentry (Error Tracking - Optional)
 VITE_SENTRY_DSN=your-sentry-dsn
@@ -252,7 +250,7 @@ net start MongoDB
 
 1. **Sign up/Login**
 2. **Create Transaction** - Specify details and select seller
-3. **Fund Escrow** - Pay using Paystack
+3. **Fund Escrow** - Pay using M-Pesa STK Push
 4. **Monitor Progress** - Track transaction status
 5. **Release Payment** - Approve work and release funds
 
@@ -458,7 +456,7 @@ Add in Vercel dashboard → Settings → Environment Variables:
 ```env
 VITE_API_URL=https://your-render-backend-url.onrender.com
 VITE_CLERK_PUBLISHABLE_KEY=pk_live_your_clerk_publishable_key
-VITE_PAYSTACK_PUBLIC_KEY=pk_live_your_paystack_public_key
+VITE_MPESA_ENVIRONMENT=production
 ```
 
 **Step 4: Deploy**
@@ -535,8 +533,11 @@ JWT_SECRET=your-super-secret-jwt-key-change-this
 # CORS Configuration
 ALLOWED_ORIGINS=https://your-frontend-vercel-url.vercel.app
 
-# Paystack (if using)
-PAYSTACK_SECRET_KEY=sk_live_your_paystack_secret_key
+# M-Pesa Configuration
+MPESA_CONSUMER_KEY=your_mpesa_consumer_key
+MPESA_CONSUMER_SECRET=your_mpesa_consumer_secret
+MPESA_SHORTCODE=your_mpesa_shortcode
+MPESA_PASSKEY=your_mpesa_passkey
 ```
 
 #### Frontend (.env) - Vercel
@@ -548,8 +549,9 @@ VITE_API_URL=https://your-render-backend-url.onrender.com
 # Authentication (Clerk)
 VITE_CLERK_PUBLISHABLE_KEY=pk_live_your_clerk_publishable_key
 
-# Paystack (if using)
-VITE_PAYSTACK_PUBLIC_KEY=pk_live_your_paystack_public_key
+# M-Pesa Configuration (Frontend)
+VITE_MPESA_ENVIRONMENT=production
+VITE_MPESA_SHORTCODE=your_mpesa_shortcode
 
 # Analytics (Optional)
 VITE_GA_TRACKING_ID=G-XXXXXXXXXX
@@ -763,7 +765,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [MongoDB](https://www.mongodb.com/)
 - [Express.js](https://expressjs.com/)
 - [Clerk](https://clerk.com/)
-- [Paystack](https://paystack.com/)
+- [M-Pesa (Safaricom)](https://developer.safaricom.co.ke/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Socket.IO](https://socket.io/)
 
@@ -800,51 +802,3 @@ For support and questions:
 - 📅 **API v2**: Planned
 
 ---
-
-## 🎯 Roadmap
-
-### Q1 2024
-
-- [ ] Mobile applications (iOS/Android)
-- [ ] Multi-currency support
-- [ ] Advanced analytics
-
-### Q2 2024
-
-- [ ] AI-powered fraud detection
-- [ ] Automated dispute resolution
-- [ ] API for third-party integration
-
-### Q3 2024
-
-- [ ] Blockchain integration
-- [ ] Smart contracts
-- [ ] Marketplace features
-
----
-
-## 📊 Statistics
-
-- **Total Transactions**: 1,000+
-- **Active Users**: 500+
-- **Success Rate**: 98%
-- **Average Resolution Time**: 24 hours
-- **Uptime**: 99.9%
-
----
-
-## ⭐ Star History
-
-If you find this project useful, please consider giving it a star! ⭐
-
----
-
-**Built with ❤️ using the MERN Stack**
-
----
-
-**Version**: 1.0.0  
-**Last Updated**: January 2024
-
-- [Node.js Documentation](https://nodejs.org/en/docs/)
-- [GitHub Classroom Guide](https://docs.github.com/en/education/manage-coursework-with-github-classroom)

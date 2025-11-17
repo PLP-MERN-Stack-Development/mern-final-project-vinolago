@@ -13,7 +13,7 @@ export default function PaymentPage() {
     useEffect(() => {
         const fetchTransaction = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/transactions/${id}`);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/transactions/${id}`);
                 if (response.ok) {
                     const data = await response.json();
                     setTransaction(data);
@@ -28,11 +28,12 @@ export default function PaymentPage() {
     const handleMpesaPayment = async () => {
         setLoading(true);
         try {
-            // Simulate M-Pesa payment initiation
-            const response = await axios.get(`http://localhost:5000/api/transactions/${id}/initiate-payment`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ paymentMethod: 'mpesa' })
+            // Initiate M-Pesa STK Push
+            const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/payments/stkpush`, {
+                amount: transaction.amount,
+                phoneNumber: transaction.buyerPhone,
+                accountReference: `TXN${transaction.id}`,
+                transactionDesc: `Escrow payment for ${transaction.assetType}`
             });
 
             if (response.ok) {
