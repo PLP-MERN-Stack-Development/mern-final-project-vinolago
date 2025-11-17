@@ -1,4 +1,4 @@
-const { helmetConfig, limiter, authLimiter, transactionLimiter, paymentLimiter, sanitize } = require('./middleware/security');
+const { helmetConfig, limiter, authLimiter, transactionLimiter, paymentLimiter, sanitize, limiterOptions, authLimiterOptions, transactionLimiterOptions, paymentLimiterOptions } = require('./middleware/security');
 const express = require('express');
 const request = require('supertest');
 
@@ -40,24 +40,24 @@ describe('Security Middleware Tests', () => {
     });
 
     test('should have appropriate window and max limits for general limiter', () => {
-      expect(limiter.options.windowMs).toBe(15 * 60 * 1000); // 15 minutes
-      expect(limiter.options.max).toBe(100);
+      expect(limiterOptions.windowMs).toBe(15 * 60 * 1000); // 15 minutes
+      expect(limiterOptions.max).toBe(100);
     });
 
     test('should have stricter limits for auth endpoints', () => {
-      expect(authLimiter.options.windowMs).toBe(15 * 60 * 1000); // 15 minutes
-      expect(authLimiter.options.max).toBe(5);
-      expect(authLimiter.options.skipSuccessfulRequests).toBe(true);
+      expect(authLimiterOptions.windowMs).toBe(15 * 60 * 1000); // 15 minutes
+      expect(authLimiterOptions.max).toBe(5);
+      expect(authLimiterOptions.skipSuccessfulRequests).toBe(true);
     });
 
     test('should have appropriate limits for transactions', () => {
-      expect(transactionLimiter.options.windowMs).toBe(60 * 60 * 1000); // 1 hour
-      expect(transactionLimiter.options.max).toBe(20);
+      expect(transactionLimiterOptions.windowMs).toBe(60 * 60 * 1000); // 1 hour
+      expect(transactionLimiterOptions.max).toBe(20);
     });
 
     test('should have appropriate limits for payments', () => {
-      expect(paymentLimiter.options.windowMs).toBe(60 * 1000); // 1 minute
-      expect(paymentLimiter.options.max).toBe(10);
+      expect(paymentLimiterOptions.windowMs).toBe(60 * 1000); // 1 minute
+      expect(paymentLimiterOptions.max).toBe(10);
     });
   });
 
@@ -171,19 +171,19 @@ describe('Security Middleware Tests', () => {
 
   describe('Rate Limit Messages', () => {
     test('general limiter should have appropriate message', () => {
-      expect(limiter.options.message).toBe('Too many requests from this IP, please try again later.');
+      expect(limiterOptions.message).toBe('Too many requests from this IP, please try again later.');
     });
 
     test('auth limiter should have specific message', () => {
-      expect(authLimiter.options.message).toBe('Too many authentication attempts, please try again later.');
+      expect(authLimiterOptions.message).toBe('Too many authentication attempts, please try again later.');
     });
 
     test('transaction limiter should have specific message', () => {
-      expect(transactionLimiter.options.message).toBe('Too many transactions created, please try again later.');
+      expect(transactionLimiterOptions.message).toBe('Too many transactions created, please try again later.');
     });
 
     test('payment limiter should have specific message', () => {
-      expect(paymentLimiter.options.message).toBe('Too many payment requests, please try again later.');
+      expect(paymentLimiterOptions.message).toBe('Too many payment requests, please try again later.');
     });
   });
 });

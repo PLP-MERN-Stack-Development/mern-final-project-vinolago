@@ -17,35 +17,43 @@ const helmetConfig = helmet({
 });
 
 // Rate limiting configuration
-const limiter = rateLimit({
+const limiterOptions = {
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
-});
+};
+
+const limiter = rateLimit(limiterOptions);
 
 // Stricter rate limiting for authentication endpoints
-const authLimiter = rateLimit({
+const authLimiterOptions = {
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 5, // Limit each IP to 5 login requests per windowMs
   message: 'Too many authentication attempts, please try again later.',
   skipSuccessfulRequests: true,
-});
+};
+
+const authLimiter = rateLimit(authLimiterOptions);
 
 // Rate limiting for transaction creation
-const transactionLimiter = rateLimit({
+const transactionLimiterOptions = {
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 20, // Limit each IP to 20 transactions per hour
   message: 'Too many transactions created, please try again later.',
-});
+};
+
+const transactionLimiter = rateLimit(transactionLimiterOptions);
 
 // Rate limiting for payment endpoints
-const paymentLimiter = rateLimit({
+const paymentLimiterOptions = {
   windowMs: 60 * 1000, // 1 minute
   max: 10, // Limit each IP to 10 payment requests per minute
   message: 'Too many payment requests, please try again later.',
-});
+};
+
+const paymentLimiter = rateLimit(paymentLimiterOptions);
 
 // Sanitize data to prevent MongoDB operator injection
 const sanitize = mongoSanitize({
@@ -61,5 +69,10 @@ module.exports = {
   authLimiter,
   transactionLimiter,
   paymentLimiter,
-  sanitize
+  sanitize,
+  // Export options for testing
+  limiterOptions,
+  authLimiterOptions,
+  transactionLimiterOptions,
+  paymentLimiterOptions
 };

@@ -30,23 +30,6 @@
     "nodemon": "^2.0.15",
     "supertest": "^6.3.4"
   },
-  "jest": {
-    "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "testMatch": [
-      "**/*.test.js",
-      "!**/node_modules/**"
-    ],
-    "collectCoverageFrom": [
-      "routes/**/*.js",
-      "models/**/*.js",
-      "middleware/**/*.js",
-      "utils/**/*.js",
-      "!**/node_modules/**"
-    ]
-  },
   "version": "1.0.0",
   "main": "server.js",
   "keywords": [],

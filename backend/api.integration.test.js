@@ -17,6 +17,7 @@ const createTestApp = () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(helmetConfig);
   app.use(sanitize);
+  app.use(limiter);
   
   // Test routes
   app.get('/api/test', (req, res) => {
@@ -27,6 +28,31 @@ const createTestApp = () => {
     const error = new Error('Test error');
     error.statusCode = 500;
     next(error);
+  });
+  
+  // Additional test routes for integration tests
+  app.post('/api/test-post', (req, res) => {
+    res.status(201).json({ success: true });
+  });
+
+  app.put('/api/test-put', (req, res) => {
+    res.json({ success: true });
+  });
+
+  app.delete('/api/test-delete', (req, res) => {
+    res.status(204).send();
+  });
+
+  app.post('/api/test-json', (req, res) => {
+    res.json({ received: req.body });
+  });
+
+  app.post('/api/test-urlencoded', (req, res) => {
+    res.json({ received: req.body });
+  });
+
+  app.post('/api/test-sanitize', (req, res) => {
+    res.json({ received: req.body });
   });
   
   // Error handling
@@ -99,10 +125,6 @@ describe('API Integration Tests', () => {
 
   describe('Request Body Parsing', () => {
     test('should parse JSON request bodies', async () => {
-      app.post('/api/test-json', (req, res) => {
-        res.json({ received: req.body });
-      });
-
       const testData = { name: 'Test', value: 123 };
       const response = await request(app)
         .post('/api/test-json')
@@ -114,10 +136,6 @@ describe('API Integration Tests', () => {
     });
 
     test('should parse URL-encoded request bodies', async () => {
-      app.post('/api/test-urlencoded', (req, res) => {
-        res.json({ received: req.body });
-      });
-
       const response = await request(app)
         .post('/api/test-urlencoded')
         .send('name=Test&value=123')
@@ -131,10 +149,6 @@ describe('API Integration Tests', () => {
 
   describe('MongoDB Sanitization', () => {
     test('should sanitize MongoDB operators in request body', async () => {
-      app.post('/api/test-sanitize', (req, res) => {
-        res.json({ received: req.body });
-      });
-
       const maliciousData = {
         name: 'Test',
         $where: 'malicious code'
@@ -160,30 +174,18 @@ describe('API Integration Tests', () => {
     });
 
     test('should handle POST requests', async () => {
-      app.post('/api/test-post', (req, res) => {
-        res.status(201).json({ success: true });
-      });
-
       await request(app)
         .post('/api/test-post')
         .expect(201);
     });
 
     test('should handle PUT requests', async () => {
-      app.put('/api/test-put', (req, res) => {
-        res.json({ success: true });
-      });
-
       await request(app)
         .put('/api/test-put')
         .expect(200);
     });
 
     test('should handle DELETE requests', async () => {
-      app.delete('/api/test-delete', (req, res) => {
-        res.status(204).send();
-      });
-
       await request(app)
         .delete('/api/test-delete')
         .expect(204);

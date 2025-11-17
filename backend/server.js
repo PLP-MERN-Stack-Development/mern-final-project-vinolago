@@ -57,6 +57,33 @@ app.get('/', (req, res) => {
   res.json({ message: 'Escrow App API', version: '1.0.0' });
 });
 
+// Test routes for integration testing (only in test environment)
+if (process.env.NODE_ENV === 'test' || process.env.TESTING === 'true') {
+  app.post('/api/test-post', (req, res) => {
+    res.status(201).json({ success: true });
+  });
+
+  app.put('/api/test-put', (req, res) => {
+    res.json({ success: true });
+  });
+
+  app.delete('/api/test-delete', (req, res) => {
+    res.status(204).send();
+  });
+
+  app.post('/api/test-json', (req, res) => {
+    res.json({ received: req.body });
+  });
+
+  app.post('/api/test-urlencoded', (req, res) => {
+    res.json({ received: req.body });
+  });
+
+  app.post('/api/test-sanitize', (req, res) => {
+    res.json({ received: req.body });
+  });
+}
+
 // 404 handler - must be after all routes
 app.use(notFound);
 
