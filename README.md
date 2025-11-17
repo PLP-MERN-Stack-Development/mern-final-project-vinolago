@@ -36,12 +36,15 @@ The Escrow Application is a comprehensive full-stack solution that enables secur
 ## 🖼️ Screenshots
 
 ### Dashboard
+
 ![Dashboard](docs/images/dashboard.png)
 
 ### Transaction Details
+
 ![Transaction](docs/images/transaction.png)
 
 ### Payment Flow
+
 ![Payment](docs/images/payment.png)
 
 ---
@@ -49,6 +52,7 @@ The Escrow Application is a comprehensive full-stack solution that enables secur
 ## 🏗️ Tech Stack
 
 ### Frontend
+
 - **React 18** - UI library
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Utility-first CSS framework
@@ -60,6 +64,7 @@ The Escrow Application is a comprehensive full-stack solution that enables secur
 - **Clerk** - Authentication UI
 
 ### Backend
+
 - **Node.js** - Runtime environment
 - **Express.js** - Web framework
 - **MongoDB** - NoSQL database
@@ -73,6 +78,7 @@ The Escrow Application is a comprehensive full-stack solution that enables secur
 - **Joi** - Validation
 
 ### DevOps & Tools
+
 - **Git & GitHub** - Version control
 - **GitHub Actions** - CI/CD
 - **Heroku/Railway** - Backend hosting
@@ -243,6 +249,7 @@ net start MongoDB
 ### User Roles
 
 #### Buyer
+
 1. **Sign up/Login**
 2. **Create Transaction** - Specify details and select seller
 3. **Fund Escrow** - Pay using Paystack
@@ -250,6 +257,7 @@ net start MongoDB
 5. **Release Payment** - Approve work and release funds
 
 #### Seller
+
 1. **Sign up/Login**
 2. **Accept Transaction** - Review and accept buyer's request
 3. **Deliver Work** - Complete agreed services/products
@@ -257,6 +265,7 @@ net start MongoDB
 5. **Receive Funds** - Get paid to wallet
 
 #### Admin
+
 1. **Monitor Transactions** - View all platform activity
 2. **Resolve Disputes** - Mediate between parties
 3. **Manage Users** - User administration
@@ -265,11 +274,13 @@ net start MongoDB
 ### Quick Start Guide
 
 **For Buyers:**
+
 ```
 1. Register → 2. Create Transaction → 3. Fund Escrow → 4. Approve Work
 ```
 
 **For Sellers:**
+
 ```
 1. Register → 2. Accept Transaction → 3. Deliver Work → 4. Get Paid
 ```
@@ -336,6 +347,7 @@ Comprehensive API documentation is available at:
 ### Quick API Reference
 
 **Authentication:**
+
 ```
 POST   /api/auth/register     - Register new user
 POST   /api/auth/login        - Login user
@@ -343,6 +355,7 @@ GET    /api/auth/verify       - Verify token
 ```
 
 **Transactions:**
+
 ```
 GET    /api/transactions      - List transactions
 POST   /api/transactions      - Create transaction
@@ -352,6 +365,7 @@ DELETE /api/transactions/:id  - Delete transaction
 ```
 
 **Payments:**
+
 ```
 POST   /api/payments/initialize  - Initialize payment
 GET    /api/payments/verify/:ref - Verify payment
@@ -360,30 +374,124 @@ GET    /api/payments/history     - Payment history
 
 ---
 
-## 🚢 Deployment
+## 🚀 Deployment (Vercel + Render)
 
-### Backend Deployment (Heroku)
+This application is configured for deployment on **Vercel** (frontend) and **Render** (backend) for optimal performance and reliability.
 
-```bash
-# Login to Heroku
-heroku login
+### 🏗️ Architecture
 
-# Create app
-heroku create your-escrow-api
-
-# Set environment variables
-heroku config:set MONGODB_URI="your-mongodb-uri"
-heroku config:set JWT_SECRET="your-jwt-secret"
-# ... set all other env variables
-
-# Deploy
-git push heroku main
-
-# Check logs
-heroku logs --tail
+```
+┌─────────────────┐    HTTP/HTTPS    ┌─────────────────┐
+│     Vercel      │ ◄──────────────► │     Render      │
+│   (Frontend)    │   API Calls      │   (Backend)     │
+│   Static Site   │                  │   API Server    │
+└─────────────────┘                  └─────────────────┘
 ```
 
-### Frontend Deployment (Vercel)
+### 🎯 Deployment Strategy
+
+- **Frontend**: Deploy React app on Vercel (optimized for static sites)
+- **Backend**: Deploy Node.js API on Render (optimized for servers)
+- **Database**: MongoDB Atlas (cloud-hosted)
+- **Environment**: Production-ready with proper CORS and environment variables
+
+---
+
+### ⚡ Quick Deploy
+
+#### 1. Backend Deployment (Render)
+
+**Step 1: Create Render Account**
+
+1. Go to [render.com](https://render.com)
+2. Sign up with GitHub/Google
+3. Connect your repository
+
+**Step 2: Create Backend Service**
+
+1. Click **"New +"** → **"Web Service"**
+2. Connect your GitHub repository
+3. Configure settings:
+
+```
+Build Command: cd backend && npm install
+Start Command: npm start
+```
+
+**Step 3: Environment Variables (Render)**
+Add these in Render dashboard:
+
+```env
+NODE_ENV=production
+PORT=5000
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/escrow-app
+JWT_SECRET=your-super-secret-jwt-key-change-this
+CLERK_SECRET_KEY=your-clerk-secret-key
+ALLOWED_ORIGINS=https://your-frontend-url.vercel.app
+```
+
+**Step 4: Deploy**
+
+- Click **"Create Web Service"**
+- Wait for deployment to complete
+- Note your Render URL: `https://your-app-name.onrender.com`
+
+#### 2. Frontend Deployment (Vercel)
+
+**Step 1: Create Vercel Account**
+
+1. Go to [vercel.com](https://vercel.com)
+2. Sign up with GitHub
+3. Import your repository
+
+**Step 2: Configure Frontend Build**
+
+- Framework: **Vite**
+- Root Directory: `frontend`
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Install Command: `npm install`
+
+**Step 3: Environment Variables (Vercel)**
+Add in Vercel dashboard → Settings → Environment Variables:
+
+```env
+VITE_API_URL=https://your-render-backend-url.onrender.com
+VITE_CLERK_PUBLISHABLE_KEY=pk_live_your_clerk_publishable_key
+VITE_PAYSTACK_PUBLIC_KEY=pk_live_your_paystack_public_key
+```
+
+**Step 4: Deploy**
+
+- Click **"Deploy"**
+- Your app will be live at: `https://your-project-name.vercel.app`
+
+---
+
+### 🔧 Manual Deployment (CLI)
+
+#### Backend (Render)
+
+```bash
+# Install Render CLI
+npm install -g @render/cli
+
+# Login
+render login
+
+# Create service
+render create service --name escrow-api --type web --plan free --env node
+
+# Set environment variables
+render config:set NODE_ENV=production
+render config:set MONGODB_URI="your-mongodb-uri"
+render config:set JWT_SECRET="your-jwt-secret"
+
+# Deploy
+render deploy
+```
+
+#### Frontend (Vercel)
 
 ```bash
 # Install Vercel CLI
@@ -392,15 +500,128 @@ npm i -g vercel
 # Login
 vercel login
 
-# Deploy
+# Deploy frontend
 cd frontend
 vercel
 
-# For production
+# Set environment variables
+vercel env add VITE_API_URL production
+# Enter: https://your-render-backend-url.onrender.com
+
+# Deploy to production
 vercel --prod
 ```
 
+---
+
+### 🌐 Environment Configuration
+
+#### Backend (.env) - Render
+
+```env
+# Production Environment
+NODE_ENV=production
+PORT=5000
+
+# Database (MongoDB Atlas)
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/escrow-app
+
+# Authentication (Clerk)
+CLERK_SECRET_KEY=sk_live_your_clerk_secret_key
+
+# Security
+JWT_SECRET=your-super-secret-jwt-key-change-this
+
+# CORS Configuration
+ALLOWED_ORIGINS=https://your-frontend-vercel-url.vercel.app
+
+# Paystack (if using)
+PAYSTACK_SECRET_KEY=sk_live_your_paystack_secret_key
+```
+
+#### Frontend (.env) - Vercel
+
+```env
+# Production Environment
+VITE_API_URL=https://your-render-backend-url.onrender.com
+
+# Authentication (Clerk)
+VITE_CLERK_PUBLISHABLE_KEY=pk_live_your_clerk_publishable_key
+
+# Paystack (if using)
+VITE_PAYSTACK_PUBLIC_KEY=pk_live_your_paystack_public_key
+
+# Analytics (Optional)
+VITE_GA_TRACKING_ID=G-XXXXXXXXXX
+```
+
+---
+
+### 🔍 Testing Deployment
+
+#### Health Checks
+
+- **Backend**: `GET https://your-render-url.onrender.com/health`
+- **Frontend**: `GET https://your-vercel-url.vercel.app`
+
+#### API Endpoints
+
+- **Root**: `GET https://your-render-url.onrender.com/`
+- **Docs**: `GET https://your-render-url.onrender.com/api/docs`
+- **Health**: `GET https://your-render-url.onrender.com/api/health`
+
+#### Common Issues & Solutions
+
+**CORS Errors:**
+
+- Ensure `ALLOWED_ORIGINS` in backend includes your Vercel URL
+- Check `VITE_API_URL` matches your Render URL exactly
+
+**Build Failures:**
+
+- Verify Node.js version compatibility (18.x recommended)
+- Check all environment variables are set
+
+**Database Connection:**
+
+- Ensure MongoDB Atlas IP whitelist includes Render IPs
+- Use connection string with username/password
+
+---
+
+### 📊 Monitoring & Logs
+
+#### Render Logs
+
+```bash
+# View logs
+render logs -f <service-id>
+
+# Or in dashboard: Services → Your Service → Logs
+```
+
+#### Vercel Logs
+
+```bash
+# View function logs
+vercel logs
+
+# Or in dashboard: Deployments → Function Logs
+```
+
+#### Health Monitoring
+
+Set up monitoring for:
+
+- Backend health endpoint
+- Database connectivity
+- Frontend availability
+- API response times
+
+---
+
 **Detailed deployment guides:**
+
 - [DEPLOYMENT-GUIDE.md](./DEPLOYMENT-GUIDE.md)
 - [CI-CD-SETUP.md](./CI-CD-SETUP.md)
 
@@ -528,6 +749,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👥 Team / Author
 
 **Your Name**
+
 - GitHub: [@your-username](https://github.com/your-username)
 - LinkedIn: [your-profile](https://linkedin.com/in/your-profile)
 - Email: your-email@example.com
@@ -582,16 +804,19 @@ For support and questions:
 ## 🎯 Roadmap
 
 ### Q1 2024
+
 - [ ] Mobile applications (iOS/Android)
 - [ ] Multi-currency support
 - [ ] Advanced analytics
 
 ### Q2 2024
+
 - [ ] AI-powered fraud detection
 - [ ] Automated dispute resolution
 - [ ] API for third-party integration
 
 ### Q3 2024
+
 - [ ] Blockchain integration
 - [ ] Smart contracts
 - [ ] Marketplace features
@@ -620,5 +845,6 @@ If you find this project useful, please consider giving it a star! ⭐
 
 **Version**: 1.0.0  
 **Last Updated**: January 2024
+
 - [Node.js Documentation](https://nodejs.org/en/docs/)
-- [GitHub Classroom Guide](https://docs.github.com/en/education/manage-coursework-with-github-classroom) 
+- [GitHub Classroom Guide](https://docs.github.com/en/education/manage-coursework-with-github-classroom)

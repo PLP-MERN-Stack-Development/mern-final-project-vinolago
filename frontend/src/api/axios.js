@@ -1,8 +1,18 @@
 import axios from "axios";
 
+// Get API URL from environment variables
+const getApiUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // Fallback to development localhost
+  return "http://localhost:5000/api";
+};
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+    baseURL: getApiUrl(),
     headers: { "Content-Type":"application/json",},
+    timeout: 10000, // 10 second timeout
 });
 
 // Request interceptor to add auth token
